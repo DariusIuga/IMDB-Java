@@ -14,5 +14,6 @@ public enum Genre{
     CRIME,
     BIOGRAPHY,
     WAR,
+    COOKING,
     OTHER
 }

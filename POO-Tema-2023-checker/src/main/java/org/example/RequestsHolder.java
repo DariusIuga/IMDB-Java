@@ -3,8 +3,8 @@ package org.example;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RequestsHolder {
-    private static List<Request> requests = new ArrayList<>();
+public class RequestsHolder{
+    private static final List<Request> requests = new ArrayList<>();
 
     static void addRequest(Request r){
         requests.add(r);

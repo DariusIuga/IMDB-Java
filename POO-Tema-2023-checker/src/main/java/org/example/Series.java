@@ -22,6 +22,10 @@ public class Series extends Production{
         this.seasonsMap = seasonsMap;
     }
 
+    public Series(){
+
+    }
+
     @Override
     public void displayInfo(){
         System.out.printf(this.toString());

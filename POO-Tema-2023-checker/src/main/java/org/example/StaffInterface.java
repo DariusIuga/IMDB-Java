@@ -1,17 +1,17 @@
 package org.example;
 
 public interface StaffInterface{
-    void addProductionSystem(Production p);
+    public void addProductionSystem(Production p);
 
-    void addActorSystem(Actor a);
+    public void addActorSystem(Actor a);
 
-    void removeProductionSystem(String name);
+    public void removeProductionSystem(String name);
 
-    void removeActorSystem(String name);
+    public void removeActorSystem(String name);
 
-    void updateProduction(Production p);
+    public void updateProduction(Production p);
 
-    void updateActor(Actor a);
+    public void updateActor(Actor a);
 
-    void resolveRequest(Request r);
+    public void resolveRequest(Request r);
 }

@@ -1,29 +1,47 @@
 package org.example;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type")
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Movie.class, name = "Movie"),
+        @JsonSubTypes.Type(value = Series.class, name = "Series")}
+)
 public abstract class Production implements Comparable<Production>{
     private String title;
-    private ArrayList<String> directorNames;
-    private ArrayList<String> actorNames;
+    private ArrayList<String> directors;
+    private ArrayList<String> actors;
+    @JsonDeserialize(using = GenresDeserializer.class)
     private ArrayList<Genre> genres;
     private ArrayList<Rating> ratings;
-    private String description;
-    private double ranking;
+    private String plot;
+    private double averageRating;
 
-    public Production(String title, ArrayList<String> directorNames,
-                      ArrayList<String> actorNames, ArrayList<Genre> genres,
-                      ArrayList<Rating> ratings, String description,
-                      double ranking){
+    public Production(String title, ArrayList<String> directors,
+                      ArrayList<String> actors, ArrayList<Genre> genres,
+                      ArrayList<Rating> ratings, String plot,
+                      double averageRating){
         this.title = title;
-        this.directorNames = directorNames;
-        this.actorNames = actorNames;
+        this.directors = directors;
+        this.actors = actors;
         this.genres = genres;
         this.ratings = ratings;
-        this.description = description;
-        this.ranking = ranking;
+        this.plot = plot;
+        this.averageRating = averageRating;
+    }
+
+    public Production(){
+
     }
 
 
@@ -35,20 +53,20 @@ public abstract class Production implements Comparable<Production>{
         this.title = title;
     }
 
-    public ArrayList<String> getDirectorNames(){
-        return directorNames;
+    public ArrayList<String> getDirectors(){
+        return directors;
     }
 
-    public void setDirectorNames(ArrayList<String> directorNames){
-        this.directorNames = directorNames;
+    public void setDirectors(ArrayList<String> directors){
+        this.directors = directors;
     }
 
-    public ArrayList<String> getActorNames(){
-        return actorNames;
+    public ArrayList<String> getActors(){
+        return actors;
     }
 
-    public void setActorNames(ArrayList<String> actorNames){
-        this.actorNames = actorNames;
+    public void setActors(ArrayList<String> actors){
+        this.actors = actors;
     }
 
     public ArrayList<Genre> getGenres(){
@@ -67,20 +85,30 @@ public abstract class Production implements Comparable<Production>{
         this.ratings = ratings;
     }
 
-    public String getDescription(){
-        return description;
+    public void addRating(Rating rating){
+        this.ratings.add(rating);
     }
 
-    public void setDescription(String description){
-        this.description = description;
+    public String getPlot(){
+        return plot;
     }
 
-    public double getRanking(){
-        return ranking;
+    public void setPlot(String plot){
+        this.plot = plot;
     }
 
-    public void setRanking(double ranking){
-        this.ranking = ranking;
+    public double getAverageRating(){
+        // Calculate new ranking on demand, instead of computing it when
+        // adding a new grade
+        int ratingsSum = 0;
+        for (Rating r : ratings){
+            ratingsSum += r.getRating();
+        }
+
+        // The final ranking is the average of all grades submitted by all users
+        averageRating = (double) ratingsSum / ratings.size();
+
+        return averageRating;
     }
 
     public abstract void displayInfo();
@@ -90,16 +118,17 @@ public abstract class Production implements Comparable<Production>{
         return this.title.compareTo(o.title);
     }
 
+
     @Override
     public String toString(){
         return "Production{" +
                 "title='" + title + '\'' +
-                ", directorNames=" + directorNames +
-                ", actorNames=" + actorNames +
+                ", directors=" + directors +
+                ", actors=" + actors +
                 ", genres=" + genres +
                 ", ratings=" + ratings +
-                ", description='" + description + '\'' +
-                ", ranking=" + ranking +
-                '}';
+                ", plot='" + plot + '\'' +
+                ", averageRating=" + averageRating +
+                "}\n";
     }
 }

@@ -1,29 +1,32 @@
 package org.example;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 public class Movie extends Production{
 
-    private Date length;
+    private String duration;
     private short releaseYear;
 
     public Movie(String title, ArrayList<String> directorNames,
                  ArrayList<String> actorNames, ArrayList<Genre> genres,
-                 ArrayList<Rating> ratings, String description,
-                 double ranking, Date length, short releaseYear){
-        super(title, directorNames, actorNames, genres, ratings, description,
-                ranking);
-        this.length = length;
+                 ArrayList<Rating> ratings, String plot,
+                 double averageRating, String duration, short releaseYear){
+        super(title, directorNames, actorNames, genres, ratings, plot,
+                averageRating);
+        this.duration = duration;
         this.releaseYear = releaseYear;
     }
 
-    public Date getLength(){
-        return length;
+    public Movie(){
+
     }
 
-    public void setLength(Date length){
-        this.length = length;
+    public String getDuration(){
+        return duration;
+    }
+
+    public void setDuration(String duration){
+        this.duration = duration;
     }
 
     public short getReleaseYear(){
@@ -39,13 +42,19 @@ public class Movie extends Production{
         System.out.printf(this.toString());
     }
 
+
     @Override
     public String toString(){
         return "Movie{" +
-                "length=" + length +
-                ", year=" + releaseYear +
-                '}';
+                "title='" + super.getTitle() + '\'' +
+                ", directors=" + super.getDirectors() +
+                ", actors=" + super.getActors() +
+                ", genres=" + super.getGenres() +
+                ", ratings=" + super.getRatings() +
+                ", plot='" + super.getPlot() + '\'' +
+                ", averageRating=" + super.getAverageRating() +
+                ", duration=" + duration +
+                ", releaseYear=" + releaseYear +
+                "}\n";
     }
-
-
 }
