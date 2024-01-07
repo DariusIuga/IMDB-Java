@@ -24,7 +24,7 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
 
     public Staff(Information information, AccountType userType,
                  String username, int experience, List<String> notifications,
-                 SortedSet<T> favorites){
+                 SortedSet<Favorite> favorites){
         super(information, userType,
                 username, experience, notifications,
                 favorites);

@@ -30,7 +30,7 @@ public abstract class User<T extends Comparable<T>> implements Observer{
     private String username;
     private int experience;
     private List<String> notifications;
-    private SortedSet<T> favorites;
+    private SortedSet<Favorite> favorites;
     private ArrayList<String> favoriteProductions;
     private ArrayList<String> favoriteActors;
 
@@ -41,7 +41,7 @@ public abstract class User<T extends Comparable<T>> implements Observer{
 
     public User(Information information, AccountType userType,
                 String username, int experience, List<String> notifications,
-                SortedSet<T> favorites){
+                SortedSet<Favorite> favorites){
         this.information = information;
         this.userType = userType;
         this.username = username;
@@ -91,19 +91,19 @@ public abstract class User<T extends Comparable<T>> implements Observer{
         this.notifications = notifications;
     }
 
-    public SortedSet<T> getFavorites(){
+    public SortedSet<Favorite> getFavorites(){
         return favorites;
     }
 
-    public void setFavorites(SortedSet<T> favorites){
+    public void setFavorites(SortedSet<Favorite> favorites){
         this.favorites = favorites;
     }
 
-    public void addToFavorites(T obj){
+    public void addToFavorites(Favorite obj){
         favorites.add(obj);
     }
 
-    public void deleteFromFavorites(T obj){
+    public void deleteFromFavorites(Favorite obj){
         favorites.remove(obj);
     }
 

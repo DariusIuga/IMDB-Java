@@ -12,7 +12,7 @@ public class Admin<T extends Comparable<T>> extends Staff<T>{
     public Admin(Information information,
                  String username, int experience,
                  List<String> notifications,
-                 SortedSet<T> favorites){
+                 SortedSet<Favorite> favorites){
         super(information, AccountType.ADMIN,
                 username, experience, notifications,
                 favorites);

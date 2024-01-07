@@ -18,7 +18,6 @@ public class Movie extends Production{
     }
 
     public Movie(){
-
     }
 
     public String getDuration(){

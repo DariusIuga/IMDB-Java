@@ -17,7 +17,7 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = Movie.class, name = "Movie"),
         @JsonSubTypes.Type(value = Series.class, name = "Series")}
 )
-public abstract class Production implements Comparable<Production>{
+public abstract class Production implements Comparable<Production>, Favorite{
     private String title;
     private ArrayList<String> directors;
     private ArrayList<String> actors;
@@ -26,6 +26,7 @@ public abstract class Production implements Comparable<Production>{
     private ArrayList<Rating> ratings;
     private String plot;
     private double averageRating;
+
 
     public Production(String title, ArrayList<String> directors,
                       ArrayList<String> actors, ArrayList<Genre> genres,
@@ -113,6 +114,10 @@ public abstract class Production implements Comparable<Production>{
 
     public abstract void displayInfo();
 
+    @Override
+    public String getName(){
+        return title;
+    }
     @Override
     public int compareTo(@NotNull Production o){
         return this.title.compareTo(o.title);

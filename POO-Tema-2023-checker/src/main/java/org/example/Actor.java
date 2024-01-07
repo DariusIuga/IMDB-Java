@@ -1,10 +1,12 @@
 package org.example;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Actor{
+public class Actor implements Favorite{
     private String name;
     private ArrayList<Performance> performances;
     private String biography;
@@ -41,6 +43,12 @@ public class Actor{
                 ", biography='" + biography + '\'' +
                 "}\n";
     }
+
+    public int compareTo(@NotNull Actor o){
+        return 0;
+    }
+
+
 }
 
 class Performance{
