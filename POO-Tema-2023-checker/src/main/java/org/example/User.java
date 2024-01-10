@@ -107,7 +107,8 @@ public abstract class User<T extends Comparable<T>> implements Observer{
     }
 
     public void logOut(){
-        // TODO: functionalitate pentru delogarea utilizatorului curent
+        User<?> activeUser = IMDB.login();
+        IMDB.showOptions(activeUser);
     }
 
     // Called by subjects (Rating and Request objects) when some events happen

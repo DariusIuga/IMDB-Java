@@ -35,6 +35,7 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
     }
 
     public void addObjectToDB(T obj){
+
         if (obj instanceof Actor){
             addActorSystem((Actor) obj);
         } else if (obj instanceof Production){
@@ -42,7 +43,6 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
         } else{
             System.err.println("Invalid object type to add to the system!");
         }
-        // Handle other cases if needed
     }
 
     public void deleteObjectFromDB(T obj){
@@ -54,7 +54,6 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
             System.err.println("Invalid object type to remove from the " +
                     "system!");
         }
-        // Handle other cases if needed
     }
 
     // StaffInterface methods
