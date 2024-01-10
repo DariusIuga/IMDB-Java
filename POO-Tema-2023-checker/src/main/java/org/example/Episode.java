@@ -3,29 +3,40 @@ package org.example;
 import java.util.Date;
 
 public class Episode{
-    private String name;
-    private Date length;
+    private String episodeName;
+    private String duration;
 
-    public Episode(String name, Date length){
-        this.name = name;
-        this.length = length;
+    public Episode(String episodeName, String duration){
+        this.episodeName = episodeName;
+        this.duration = duration;
     }
 
-    public String getName(){
-        return name;
+    public Episode(){
+
     }
 
-    public void setName(String name){
-        this.name = name;
+    public String getEpisodeName(){
+        return episodeName;
     }
 
-    public Date getLength(){
-        return length;
+    public void setEpisodeName(String episodeName){
+        this.episodeName = episodeName;
     }
 
-    public void setLength(Date length){
-        this.length = length;
+    public String getDuration(){
+        return duration;
+    }
+
+    public void setDuration(String duration){
+        this.duration = duration;
     }
 
 
+    @Override
+    public String toString(){
+        return "Episode{" +
+                "episodeName='" + episodeName + '\'' +
+                ", duration='" + duration + '\'' +
+                "}\n";
+    }
 }

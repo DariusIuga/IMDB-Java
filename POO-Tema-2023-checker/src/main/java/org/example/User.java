@@ -5,12 +5,12 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.SortedSet;
+import java.util.*;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(
@@ -30,9 +30,9 @@ public abstract class User<T extends Comparable<T>> implements Observer{
     private String username;
     private int experience;
     private List<String> notifications;
-    private SortedSet<Favorite> favorites;
-    private ArrayList<String> favoriteProductions;
-    private ArrayList<String> favoriteActors;
+    private SortedSet<Favorite> favorites = new TreeSet<>();
+    ArrayList<String> favoriteProductions;
+    ArrayList<String> favoriteActors;
 
 
     public User(){
@@ -49,7 +49,6 @@ public abstract class User<T extends Comparable<T>> implements Observer{
         this.notifications = notifications;
         this.favorites = favorites;
     }
-
 
     public Information getInformation(){
         return information;

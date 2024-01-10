@@ -15,6 +15,11 @@ public class Actor implements Favorite{
         return name;
     }
 
+    @Override
+    public int compareTo(@NotNull Favorite o){
+        return this.name.compareTo(o.getName());
+    }
+
     public void setName(String name){
         this.name = name;
     }

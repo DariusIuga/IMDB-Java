@@ -42,6 +42,27 @@ public class IMDB{
         for (Request request : requests){
             request.stringToLDT();
         }
+
+        for (User<?> user : accounts){
+            if(user.favoriteProductions != null){
+                for (String productionString : user.favoriteProductions){
+                    for (Production production : productions){
+                        if (production.getTitle().equals(productionString)){
+                            user.addToFavorites(production);
+                        }
+                    }
+                }
+            }
+            if(user.favoriteActors != null){
+                for (String actorString : user.favoriteActors){
+                    for (Actor actor : actors){
+                        if (actor.getName().equals(actorString)){
+                            user.addToFavorites(actor);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public static User<?> login(){
@@ -134,18 +155,16 @@ public class IMDB{
                     System.out.println("\t7) Add/Delete actor/movie/series " +
                             "to/from system");
                     System.out.println("\t8) View and solve requests");
-                    System.out.println("\t9) Update movie details");
-                    System.out.println("\t10) Update actor details");
-                    System.out.println("\t11) Log Out");
+                    System.out.println("\t9) Update movie/actor details");
+                    System.out.println("\t10) Log Out");
                 }
                 case ADMIN -> {
                     System.out.println("\t6) Add/Delete actor/movie/series " +
                             "to/from system");
                     System.out.println("\t7) View and solve requests");
-                    System.out.println("\t8) Update movie details");
-                    System.out.println("\t9) Update actor details");
-                    System.out.println("\t10) Add/Delete user");
-                    System.out.println("\t11) Log Out");
+                    System.out.println("\t8) Update movie/actor details");
+                    System.out.println("\t9) Add/Delete user");
+                    System.out.println("\t10) Log Out");
                 }
                 default -> System.err.println("Invalid user type when" +
                         " showing " +
@@ -198,13 +217,19 @@ public class IMDB{
     }
 
     public static void manageFavorites(){
+        ArrayList<String> favoriteActors = activeUser.getFavoriteActors();
+        ArrayList<String> favoriteProductions =
+                activeUser.getFavoriteProductions();
+        System.out.println("These are your current favorite actors:\n" + favoriteActors);
+        System.out.println("These are your current favorite productions:\n" + favoriteProductions);
         System.out.println("Do you want to add or delete " +
                 "something " +
                 "from you favorites list? (add/delete)");
+
         switch (scanner.nextLine().trim()){
             case "add" -> {
                 System.out.println("What do you want to add? " +
-                        "(actor/production");
+                        "(actor/production)");
                 switch (scanner.nextLine().trim()){
                     case "actor" -> {
                         System.out.println("Enter the name of the" +
@@ -213,17 +238,19 @@ public class IMDB{
                         String name = scanner.nextLine().trim();
                         for (Actor actor : actors){
                             if (actor.getName().equals(name)){
+                                activeUser.favoriteActors.add(name);
                                 activeUser.addToFavorites(actor);
                             }
                         }
                     }
                     case "production" -> {
                         System.out.println("Enter the name of the" +
-                                " movie/series you want to add " +
-                                "to your favorites list: ");
+                                " production you want to add to your" +
+                                "favorites list: ");
                         String name = scanner.nextLine().trim();
                         for (Production production : productions){
-                            if (production.getTitle().equals(name)){
+                            if (production.getName().equals(name)){
+                                activeUser.favoriteProductions.add(name);
                                 activeUser.addToFavorites(production);
                             }
                         }
@@ -236,16 +263,17 @@ public class IMDB{
 
             case "delete" -> {
                 System.out.println("What do you want to delete? " +
-                        "(actor/production");
+                        "(actor/production)");
                 switch (scanner.nextLine().trim()){
                     case "actor" -> {
                         System.out.println("Enter the name of the" +
                                 " actor you want to delete from " +
-                                "your" +
+                                " your" +
                                 "favorites list: ");
                         String name = scanner.nextLine().trim();
                         for (Actor actor : actors){
                             if (actor.getName().equals(name)){
+                                activeUser.favoriteActors.remove(name);
                                 activeUser.deleteFromFavorites(actor);
                             }
                         }
@@ -258,6 +286,7 @@ public class IMDB{
                         String name = scanner.nextLine().trim();
                         for (Production production : productions){
                             if (production.getTitle().equals(name)){
+                                activeUser.favoriteProductions.remove(name);
                                 activeUser.deleteFromFavorites(production);
                             }
                         }
@@ -292,9 +321,8 @@ public class IMDB{
                     case 6 -> manageRequests();
                     case 7 -> manageProductionsAndActors();
                     case 8 -> solveRequests();
-                    case 9 -> updateProductionInfo();
-                    case 10 -> updateActorInfo();
-                    case 11 -> {
+                    case 9 -> updateInfo();
+                    case 10 -> {
                         logout();
                     }
                     default -> System.out.println("Invalid input when " +
@@ -306,10 +334,9 @@ public class IMDB{
                 switch (choice){
                     case 6 -> manageProductionsAndActors();
                     case 7 -> solveRequests();
-                    case 8-> updateProductionInfo();
-                    case 9 -> updateActorInfo();
-                    case 10 -> manageUsers();
-                    case 11 -> {
+                    case 8 -> updateInfo();
+                    case 9 -> manageUsers();
+                    case 10 -> {
                         logout();
                     }
                     default -> System.out.println("Invalid input when " +
@@ -335,11 +362,7 @@ public class IMDB{
         System.out.println("TODO");
     }
 
-    public static void updateProductionInfo(){
-        System.out.println("TODO");
-    }
-
-    public static void updateActorInfo(){
+    public static void updateInfo(){
         System.out.println("TODO");
     }
 
