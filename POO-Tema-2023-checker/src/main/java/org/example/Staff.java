@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.SortedSet;
+import java.util.TreeSet;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY)
@@ -15,83 +16,69 @@ import java.util.SortedSet;
 
         @JsonSubTypes.Type(value = Admin.class, name = "Admin")}
 )
-public abstract class Staff<T extends Comparable<T>> extends User<T> implements StaffInterface{
-    List<Request> requestsToSolve;
-    private SortedSet<T> addedToDatabase;
+public abstract class Staff<T extends Comparable<T>> extends User<T> implements StaffInterface, Subject{
+    List<Request> requestsToSolve = new ArrayList<>();
+    private SortedSet<CommonInterface> totalContribution = new TreeSet<>();
     private ArrayList<String> productionsContribution;
     private ArrayList<String> actorsContribution;
 
 
     public Staff(Information information, AccountType userType,
                  String username, int experience, List<String> notifications,
-                 SortedSet<Favorite> favorites){
+                 SortedSet<CommonInterface> commonInterfaces){
         super(information, userType,
                 username, experience, notifications,
-                favorites);
+                commonInterfaces);
     }
 
     public Staff(){
 
     }
 
-    public void addObjectToDB(T obj){
-
-        if (obj instanceof Actor){
-            addActorSystem((Actor) obj);
-        } else if (obj instanceof Production){
-            addProductionSystem((Production) obj);
-        } else{
-            System.err.println("Invalid object type to add to the system!");
-        }
-    }
-
-    public void deleteObjectFromDB(T obj){
-        if (obj instanceof Actor){
-            removeActorSystem(obj.toString());
-        } else if (obj instanceof Production){
-            removeProductionSystem(obj.toString());
-        } else{
-            System.err.println("Invalid object type to remove from the " +
-                    "system!");
-        }
-    }
-
     // StaffInterface methods
     public void addProductionSystem(Production p){
-        addedToDatabase.add((T) p);
+        productionsContribution.add(p.getTitle());
+        IMDB.productions.add(p);
     }
 
     public void addActorSystem(Actor a){
-        addedToDatabase.add((T) a);
+        IMDB.actors.add(a);
     }
 
     public void removeProductionSystem(String name){
-
+        productionsContribution.removeIf(production -> production.equals(name));
+        IMDB.productions.removeIf(production -> production.getTitle().equals(name));
     }
 
     public void removeActorSystem(String name){
-
+        actorsContribution.removeIf(actor -> actor.equals(name));
+        IMDB.actors.removeIf(actor -> actor.getName().equals(name));
     }
 
     public void updateProduction(Production p){
-
+        productionsContribution.add(p.getTitle());
+        IMDB.productions.add(p);
     }
 
     public void updateActor(Actor a){
-
+        actorsContribution.add(a.getName());
+        IMDB.actors.add(a);
     }
 
     public void resolveRequest(Request r){
 
     }
 
-
-    public SortedSet<T> getAddedToDatabase(){
-        return addedToDatabase;
+    public SortedSet<CommonInterface> getTotalContribution(){
+        return totalContribution;
     }
 
-    public void setAddedToDatabase(SortedSet<T> addedToDatabase){
-        this.addedToDatabase = addedToDatabase;
+    public void setTotalContribution(SortedSet<CommonInterface> totalContribution){
+        this.totalContribution = totalContribution;
+    }
+
+    public void addToContribution(CommonInterface contribution){
+        this.totalContribution.add(contribution);
     }
 
     public List<Request> getRequestsToSolve(){
@@ -119,6 +106,27 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
         this.productionsContribution = productionsContribution;
     }
 
+    // Implement Subject methods
+    @Override
+    public void subscribe(Observer observer){
+        // Implement subscription logic here
+    }
+
+    @Override
+    public void unsubscribe(Observer observer){
+        // Implement unsubscription logic here
+    }
+
+    @Override
+    public void notifyObservers(String message){
+        // Implement notification logic here
+    }
+
+    // Notifies users about resolved/rejected requests and reviewed productions
+    public void notifyUsers(String message){
+        this.update(message);
+    }
+
     @Override
     public String toString(){
         return "User{" +
@@ -132,6 +140,7 @@ public abstract class Staff<T extends Comparable<T>> extends User<T> implements 
                 ", favoriteActors=" + super.getFavoriteActors() +
                 ", productionsContribution=" + productionsContribution +
                 ", actorsContribution=" + actorsContribution +
+                ", totalContribution=" + totalContribution +
                 "}\n";
     }
 }

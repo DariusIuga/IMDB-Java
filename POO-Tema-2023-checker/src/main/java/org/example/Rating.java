@@ -1,9 +1,13 @@
 package org.example;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Rating implements Subject{
     private String username;
     private byte rating;
     private String comment;
+    private List<Observer> observers = new ArrayList<>();
 
     public Rating(String username, byte rating, String comment){
         if(rating < 1 || rating > 10){
@@ -46,19 +50,22 @@ public class Rating implements Subject{
         this.comment = comment;
     }
 
+    // Implement Subject methods
     @Override
-    public void subscribe(User user){
-
+    public void subscribe(Observer observer) {
+        observers.add(observer);
     }
 
     @Override
-    public void unsubscribe(User user){
-
+    public void unsubscribe(Observer observer) {
+        observers.remove(observer);
     }
 
     @Override
-    public void Notify(){
-
+    public void notifyObservers(String message) {
+        for (Observer observer : observers) {
+            observer.update(message);
+        }
     }
 
     @Override

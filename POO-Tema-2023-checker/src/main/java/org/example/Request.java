@@ -2,58 +2,86 @@ package org.example;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Request implements Subject{
+    private static final DateTimeFormatter formatter =
+            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
     private RequestType type;
     private LocalDateTime date;
     private String movieTitle;
     private String actorName;
-
     private String description;
     private String username;
     private String to;
-
     // Wrapper for JSON
     private String createdDate;
-
-    private static final DateTimeFormatter formatter =
-            DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
-
-    // Incomplet
-//    public Request(RequestType typeEnum, String description, String username, String to){
-//        this.typeEnum = typeEnum;
-//        this.date = LocalDateTime.now();
-//        this.description = description;
-//        this.username = username;
-//
-//        switch (typeEnum){
-//            case DELETE_ACCOUNT,OTHERS -> this.to = "ADMIN";
-//            case ACTOR_ISSUE, MOVIE_ISSUE -> RequestsHolder.addRequest(this);
-//        }
-//    }
+    private final List<Observer> observers = new ArrayList<>();
 
     public Request(){
+        date = LocalDateTime.now();
+        createdDate = date.format(formatter);
     }
 
-    public void stringToLDT(){
-        if(createdDate != null){
-            this.date = LocalDateTime.parse(createdDate,formatter);
+    public Request(RequestType type, String description){
+        super();
+        this.type = type;
+        this.description = description;
+        if(type.equals(RequestType.DELETE_ACCOUNT) || type.equals(RequestType.OTHERS)){
+            this.to = "ADMIN";
         }
     }
 
-    @Override
-    public void subscribe(User user){
+    public Request(RequestType type, String description, String name){
+        this(type,description);
+        if(type.equals(RequestType.ACTOR_ISSUE)){
+            this.actorName = name;
 
+            // Get the name of the Staff member that added this actor
+            for(User<?> user: IMDB.accounts){
+                if(user.getUserType().equals(AccountType.CONTRIBUTOR) || user.getUserType().equals(
+                        AccountType.ADMIN)){
+                    Staff<?> staff = (Staff<?>) user;
+                    ArrayList<String> actorsContribution =
+                            staff.getActorsContribution();
+                    if(actorsContribution != null){
+                        for(String actor: actorsContribution){
+                            if (name.equals(actor)){
+                                this.to = user.getUsername();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        } else if (type.equals(RequestType.MOVIE_ISSUE)){
+            this.movieTitle = name;
+
+            // Get the name of the Staff member that added this movie
+            for(User<?> user: IMDB.accounts){
+                if(user.getUserType().equals(AccountType.CONTRIBUTOR) || user.getUserType().equals(
+                        AccountType.ADMIN)){
+                    Staff<?> staff = (Staff<?>) user;
+                    ArrayList<String>  productionsContribution =
+                            staff.getProductionsContribution();
+                    if(productionsContribution != null){
+                        for(String movie: productionsContribution){
+                            if (name.equals(movie)){
+                                this.to = user.getUsername();
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
-    @Override
-    public void unsubscribe(User user){
-
-    }
-
-    @Override
-    public void Notify(){
-
+    public void stringToLDT(){
+        if (createdDate != null){
+            this.date = LocalDateTime.parse(createdDate, formatter);
+        }
     }
 
     public RequestType getType(){
@@ -120,6 +148,23 @@ public class Request implements Subject{
         this.createdDate = createdDate;
     }
 
+    // Implement Subject methods
+    @Override
+    public void subscribe(Observer observer){
+        observers.add(observer);
+    }
+
+    @Override
+    public void unsubscribe(Observer observer){
+        observers.remove(observer);
+    }
+
+    @Override
+    public void notifyObservers(String message){
+        for (Observer observer : observers){
+            observer.update(message);
+        }
+    }
 
     @Override
     public String toString(){

@@ -13,10 +13,10 @@ public class Regular<T extends Comparable<T>> extends User<T> implements Request
     public Regular(Information information,
                    String username, int experience,
                    List<String> notifications,
-                   SortedSet<Favorite> favorites){
+                   SortedSet<CommonInterface> commonInterfaces){
         super(information, AccountType.REGULAR,
                 username, experience, notifications,
-                favorites);
+                commonInterfaces);
     }
 
     public Regular(){

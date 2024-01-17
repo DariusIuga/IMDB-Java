@@ -17,7 +17,7 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = Movie.class, name = "Movie"),
         @JsonSubTypes.Type(value = Series.class, name = "Series")}
 )
-public abstract class Production implements Favorite{
+public abstract class Production implements CommonInterface,Comparable<CommonInterface>{
     private String title;
     private ArrayList<String> directors;
     private ArrayList<String> actors;
@@ -120,7 +120,7 @@ public abstract class Production implements Favorite{
     }
 
     @Override
-    public int compareTo(@NotNull Favorite o){
+    public int compareTo(@NotNull CommonInterface o){
         return this.title.compareTo(o.getName());
 
     }

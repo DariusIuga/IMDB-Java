@@ -3,20 +3,28 @@ package org.example;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-public class Actor implements Favorite{
+public class Actor implements CommonInterface{
     private String name;
     private ArrayList<Performance> performances;
     private String biography;
+
+    public Actor(String name, ArrayList<Performance> performances, String biography){
+        this.name = name;
+        this.performances = performances;
+        this.biography = biography;
+    }
+
+    public Actor(){
+
+    }
 
     public String getName(){
         return name;
     }
 
     @Override
-    public int compareTo(@NotNull Favorite o){
+    public int compareTo(@NotNull CommonInterface o){
         return this.name.compareTo(o.getName());
     }
 
@@ -50,7 +58,7 @@ public class Actor implements Favorite{
     }
 
     public int compareTo(@NotNull Actor o){
-        return 0;
+        return this.name.compareTo(o.getName());
     }
 
 
@@ -59,6 +67,15 @@ public class Actor implements Favorite{
 class Performance{
     private String title;
     private String type;
+
+    public Performance(String title, String type){
+        this.title = title;
+        this.type = type;
+    }
+
+    public Performance(){
+
+    }
 
     public String getTitle(){
         return title;
@@ -81,6 +98,6 @@ class Performance{
         return "Performance{" +
                 "title='" + title + '\'' +
                 ", type='" + type + '\'' +
-                '}';
+                "}\n";
     }
 }

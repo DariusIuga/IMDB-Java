@@ -5,9 +5,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -30,7 +29,7 @@ public abstract class User<T extends Comparable<T>> implements Observer{
     private String username;
     private int experience;
     private List<String> notifications;
-    private SortedSet<Favorite> favorites = new TreeSet<>();
+    private SortedSet<CommonInterface> favorites = new TreeSet<>();
     ArrayList<String> favoriteProductions;
     ArrayList<String> favoriteActors;
 
@@ -41,7 +40,7 @@ public abstract class User<T extends Comparable<T>> implements Observer{
 
     public User(Information information, AccountType userType,
                 String username, int experience, List<String> notifications,
-                SortedSet<Favorite> favorites){
+                SortedSet<CommonInterface> favorites){
         this.information = information;
         this.userType = userType;
         this.username = username;
@@ -90,25 +89,33 @@ public abstract class User<T extends Comparable<T>> implements Observer{
         this.notifications = notifications;
     }
 
-    public SortedSet<Favorite> getFavorites(){
+    public SortedSet<CommonInterface> getFavorites(){
         return favorites;
     }
 
-    public void setFavorites(SortedSet<Favorite> favorites){
-        this.favorites = favorites;
+    public void setFavorites(SortedSet<CommonInterface> commonInterfaces){
+        this.favorites = commonInterfaces;
     }
 
-    public void addToFavorites(Favorite obj){
+    public void addToFavorites(CommonInterface obj){
         favorites.add(obj);
     }
 
-    public void deleteFromFavorites(Favorite obj){
+    public void deleteFromFavorites(CommonInterface obj){
         favorites.remove(obj);
     }
 
     public void logOut(){
         User<?> activeUser = IMDB.login();
         IMDB.showOptions(activeUser);
+    }
+
+    public void subscribeToSubject(Subject subject) {
+        subject.subscribe(this);
+    }
+
+    public void unsubscribeFromSubject(Subject subject) {
+        subject.unsubscribe(this);
     }
 
     // Called by subjects (Rating and Request objects) when some events happen
@@ -159,6 +166,20 @@ public abstract class User<T extends Comparable<T>> implements Observer{
         private final String birthDate;
         private LocalDateTime date;
 
+        public void stringToLDT(){
+            if (birthDate != null){
+                this.date = LocalDate.parse(birthDate, formatter).atStartOfDay();
+            }
+        }
+
+        public LocalDateTime getDate(){
+            return date;
+        }
+
+        public void setDate(LocalDateTime date){
+            this.date = date;
+        }
+
         private Information(InformationBuilder builder){
             this.credentials = builder.credentials;
             this.name = builder.name;
@@ -201,6 +222,7 @@ public abstract class User<T extends Comparable<T>> implements Observer{
                     ", age=" + age +
                     ", gender=" + gender +
                     ", birthDate=" + birthDate +
+                    ", date=" + date +
                     "}\n";
         }
 

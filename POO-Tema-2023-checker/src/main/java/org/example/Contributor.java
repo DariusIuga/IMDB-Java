@@ -13,10 +13,10 @@ public class Contributor<T extends Comparable<T>> extends Staff<T> implements Re
     public Contributor(Information information,
                        String username, int experience,
                        List<String> notifications,
-                       SortedSet<Favorite> favorites){
+                       SortedSet<CommonInterface> commonInterfaces){
         super(information, AccountType.CONTRIBUTOR,
                 username, experience, notifications,
-                favorites);
+                commonInterfaces);
     }
 
     public Contributor(){
