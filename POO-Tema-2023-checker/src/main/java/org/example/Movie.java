@@ -5,16 +5,14 @@ import java.util.ArrayList;
 public class Movie extends Production{
 
     private String duration;
-    private short releaseYear;
 
     public Movie(String title, ArrayList<String> directorNames,
                  ArrayList<String> actorNames, ArrayList<Genre> genres,
                  ArrayList<Rating> ratings, String plot,
                  double averageRating, String duration, short releaseYear){
         super(title, directorNames, actorNames, genres, ratings, plot,
-                averageRating);
+                averageRating, releaseYear);
         this.duration = duration;
-        this.releaseYear = releaseYear;
     }
 
     public Movie(){
@@ -28,14 +26,6 @@ public class Movie extends Production{
         this.duration = duration;
     }
 
-    public short getReleaseYear(){
-        return releaseYear;
-    }
-
-    public void setReleaseYear(short releaseYear){
-        this.releaseYear = releaseYear;
-    }
-
     @Override
     public void displayInfo(){
         System.out.printf(this.toString());
@@ -45,15 +35,15 @@ public class Movie extends Production{
     @Override
     public String toString(){
         return "Movie{" +
-                "title='" + super.getTitle() + '\'' +
-                ", directors=" + super.getDirectors() +
-                ", actors=" + super.getActors() +
-                ", genres=" + super.getGenres() +
-                ", ratings=" + super.getRatings() +
-                ", plot='" + super.getPlot() + '\'' +
-                ", averageRating=" + super.getAverageRating() +
+                "title='" + getTitle() +
+                ", directors=" + getDirectors() +
+                ", actors=" + getActors() +
+                ", genres=" + getGenres() +
+                ", ratings=" + getRatings() +
+                ", plot='" + getPlot() +
+                ", averageRating=" + getAverageRating() +
                 ", duration=" + duration +
-                ", releaseYear=" + releaseYear +
+                ", releaseYear=" + getReleaseYear() +
                 "}\n";
     }
 }

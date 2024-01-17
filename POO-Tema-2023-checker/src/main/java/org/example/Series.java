@@ -6,7 +6,6 @@ import java.util.Map;
 
 public class Series extends Production{
 
-    private short releaseYear;
     private int numSeasons;
     private Map<String, List<Episode>> seasons;
 
@@ -16,8 +15,7 @@ public class Series extends Production{
                   double ranking, short releaseYear, int numSeasons,
                   Map<String, List<Episode>> seasons){
         super(title, directorNames, actorNames, genres, ratings, description,
-                ranking);
-        this.releaseYear = releaseYear;
+                ranking, releaseYear);
         this.numSeasons = numSeasons;
         this.seasons = seasons;
     }
@@ -29,14 +27,6 @@ public class Series extends Production{
     @Override
     public void displayInfo(){
         System.out.printf(this.toString());
-    }
-
-    public short getReleaseYear(){
-        return releaseYear;
-    }
-
-    public void setReleaseYear(short releaseYear){
-        this.releaseYear = releaseYear;
     }
 
     public int getNumSeasons(){
@@ -65,7 +55,7 @@ public class Series extends Production{
                 ", ratings=" + getRatings() +
                 ", plot='" + getPlot() + '\'' +
                 ", averageRating=" + getAverageRating() +
-                ", releaseYear=" + releaseYear +
+                ", releaseYear=" + getReleaseYear() +
                 ", numberOfSeasons=" + numSeasons +
                 ", seasonsMap=" + seasons +
                 "}\n";

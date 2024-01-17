@@ -40,6 +40,13 @@ public class Actor implements CommonInterface{
         this.performances = performances;
     }
 
+    public Performance getPerformance(int i){
+        return performances.get(i);
+    }
+    public void addPerformance(Performance performance){
+        this.performances.add(performance);
+    }
+
     public String getBiography(){
         return biography;
     }

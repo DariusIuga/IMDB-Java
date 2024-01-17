@@ -364,7 +364,7 @@ public class IMDB{
             case 6 -> manageRequests(activeUser);
             case 7 -> manageProductionsAndActors(activeUser);
             case 8 -> solveRequests(activeUser);
-            case 9 -> updateInfo();
+            case 9 -> updateInfo(activeUser);
             case 10 -> logout();
             default ->
                     System.err.println("Invalid input when selecting options:" +
@@ -376,7 +376,7 @@ public class IMDB{
         switch (choice){
             case 6 -> manageProductionsAndActors(activeUser);
             case 7 -> solveRequests((activeUser));
-            case 8 -> updateInfo();
+            case 8 -> updateInfo(activeUser);
             case 9 -> manageUsers(activeUser);
             case 10 -> logout();
             default ->
@@ -740,7 +740,7 @@ public class IMDB{
     }
 
     public static void solveRequests(Staff<?> activeUser){
-        if(activeUser.requestsToSolve.isEmpty()){
+        if (activeUser.requestsToSolve.isEmpty()){
             System.out.println("You have no requests to view!");
             return;
         }
@@ -750,13 +750,14 @@ public class IMDB{
             System.out.println(i + ") " + request);
             i++;
         }
+        i -= 2;
 
         int choice = 0;
         do{
             System.out.println("\nWhich request do you want to inspect?");
             choice = scanner.nextInt();
             scanner.nextLine();
-            if (choice < 1 || choice > i){
+            if (choice < 1 || choice > i + 1){
                 System.err.println("Enter a valid request number please!");
             } else{
                 break;
@@ -804,9 +805,418 @@ public class IMDB{
 
     }
 
-    public static void updateInfo(){
-        System.out.println("TODO");
+    public static void updateInfo(Staff<?> activeUser){
+        do{
+            System.out.println("What do you want to update? (production/actor)\n " +
+                    "Type 'done' to exit.");
+            switch (scanner.nextLine().trim()){
+                case "production" -> {
+                    System.out.println("These are all the current " +
+                            "added productions: ");
+                    int i = 1;
+                    for (Production production : productions){
+                        System.out.println(i + ") " + production);
+                        i++;
+                    }
+                    i -= 2;
+
+                    int choice = 0;
+                    do{
+                        System.out.println("\nWhat production do you want to " +
+                                "change?");
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (choice < 1 || choice > i + 1){
+                            System.err.println("Enter a valid production " +
+                                    "number please!");
+                        } else{
+                            break;
+                        }
+                    }
+                    while (true);
+                    choice--;
+
+                    updateProduction(productions.get(i));
+                }
+                case "actor" -> {
+                    System.out.println("These are all the current " +
+                            "added actors: ");
+                    int i = 1;
+                    for (Actor actor : actors){
+                        System.out.println(i + ") " + actor);
+                        i++;
+                    }
+                    i -= 2;
+
+                    int choice = 0;
+                    do{
+                        System.out.println("\nWhat actor do you want to " +
+                                "change?");
+                        choice = scanner.nextInt();
+                        scanner.nextLine();
+                        if (choice < 1 || choice > i + 1){
+                            System.err.println("Enter a valid actor " +
+                                    "number please!");
+                        } else{
+                            break;
+                        }
+                    }
+                    while (true);
+                    choice--;
+
+                    updateActor(actors.get(i));
+                }
+                case "done" -> {
+                    return;
+                }
+                default -> System.err.println("Enter a valid choice please!");
+            }
+        } while (true);
     }
+
+    public static void updateProduction(Production production){
+        do{
+            System.out.println("What to change?");
+            System.out.println("1) Title");
+            System.out.println("2) Directors");
+            System.out.println("3) Actors");
+            System.out.println("4) Genres");
+            System.out.println("5) Plot");
+            System.out.println("6) Release Year");
+            System.out.println("7) Done");
+
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice){
+                case 1 -> {
+                    System.out.println("Title: ");
+                    String title = scanner.nextLine().trim();
+                    production.setTitle(title);
+                }
+                case 2 -> {
+                    System.out.println("These are the directors for this " +
+                            "production: ");
+                    int i = 0;
+                    for (String director : production.getDirectors()){
+                        i++;
+                        System.out.println(i + ") " + director);
+                    }
+
+
+                    System.out.println("Do you want to add,change or delete a" +
+                            " performance? (add/change/delete)");
+                    switch (scanner.nextLine().trim()){
+                        case "add" -> {
+                            System.out.println("New director name: ");
+                            String name = scanner.nextLine().trim();
+                            production.getDirectors().add(name);
+                        }
+                        case "change" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat director do you" +
+                                        " want to " +
+                                        "change?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "director" +
+                                            " number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            System.out.println("New director name: ");
+                            String name = scanner.nextLine().trim();
+                            production.getDirectors().set(i - 1, name);
+                        }
+                        case "delete" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat director do you" +
+                                        " want to " +
+                                        "delete?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "director" +
+                                            " " +
+                                            "number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            production.getDirectors().remove(i - 1);
+                        }
+                        default -> System.err.println("Please enter a valid " +
+                                "option!");
+                    }
+                }
+                case 3 -> {
+                    System.out.println("These are the actors for this " +
+                            "production: ");
+                    int i = 0;
+                    for (String actor : production.getActors()){
+                        i++;
+                        System.out.println(i + ") " + actor);
+                    }
+
+
+                    System.out.println("Do you want to add,change or delete " +
+                            "an" +
+                            " actor? (add/change/delete)");
+                    switch (scanner.nextLine().trim()){
+                        case "add" -> {
+                            System.out.println("New actor name: ");
+                            String name = scanner.nextLine().trim();
+                            production.getActors().add(name);
+                        }
+                        case "change" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat actor do you" +
+                                        " want to " +
+                                        "change?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "actor" +
+                                            " number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            System.out.println("New actor name: ");
+                            String name = scanner.nextLine().trim();
+                            production.getActors().set(i - 1, name);
+                        }
+                        case "delete" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat actor do you" +
+                                        " want to " +
+                                        "delete?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "actor" +
+                                            " " +
+                                            "number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            production.getActors().remove(i - 1);
+                        }
+                        default -> System.err.println("Please enter a valid " +
+                                "option!");
+                    }
+                }
+                case 4 -> {
+                    System.out.println("These are the genres for this " +
+                            "production: ");
+                    int i = 0;
+                    for (Genre genre : production.getGenres()){
+                        i++;
+                        System.out.println(i + ") " + genre);
+                    }
+
+                    System.out.println("\nThese are all the registered genre " +
+                            "names. Other is used for any other entered " +
+                            "genre: ACTION,\n" +
+                            "    ADVENTURE,\n" +
+                            "    COMEDY,\n" +
+                            "    DRAMA,\n" +
+                            "    HORROR,\n" +
+                            "    SF,\n" +
+                            "    FANTASY,\n" +
+                            "    ROMANCE,\n" +
+                            "    MYSTERY,\n" +
+                            "    THRILLER,\n" +
+                            "    CRIME,\n" +
+                            "    BIOGRAPHY,\n" +
+                            "    WAR,\n" +
+                            "    COOKING,\n" +
+                            "    OTHER");
+                    System.out.println("Do you want to add or delete " +
+                            "a" +
+                            " genre? (add/delete)");
+                    switch (scanner.nextLine().trim()){
+                        case "add" -> {
+                            System.out.println("New genre name: ");
+                            String name = scanner.nextLine().trim();
+                            Genre genre;
+                            try{
+                                genre = Genre.valueOf(name.toUpperCase());
+                            }
+                            catch (IllegalArgumentException e){
+                                genre = Genre.OTHER;
+                            }
+                            production.addGenre(genre);
+                        }
+                        case "delete" -> {
+                            System.out.println("\nWhat genre do you" +
+                                    " want to " +
+                                    "delete?");
+                            String name = scanner.nextLine().trim();
+                            Genre genre;
+                            try{
+                                genre = Genre.valueOf(name.toUpperCase());
+                            }
+                            catch (IllegalArgumentException e){
+                                genre = Genre.OTHER;
+                            }
+                            production.getGenres().remove(genre);
+                        }
+                        default -> System.err.println("Please enter a valid " +
+                                "option!");
+                    }
+                }
+                case 5 -> {
+                    System.out.println("Plot: ");
+                    String plot = scanner.nextLine().trim();
+                    production.setPlot(plot);
+                }
+                case 6 -> {
+                    System.out.println("Release Year: ");
+                    short releaseYear = scanner.nextShort();
+                    scanner.nextLine();
+                    production.setReleaseYear(releaseYear);
+                }
+                case 7 -> {
+                    return;
+                }
+                default -> {
+                    System.err.println("Please enter a valid option");
+                }
+            }
+        } while (true);
+    }
+
+    public static void updateActor(Actor actor){
+        do{
+            System.out.println("What to change?");
+            System.out.println("1) Name");
+            System.out.println("2) Performances");
+            System.out.println("3) Biography");
+            System.out.println("4) Exit");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+            switch (choice){
+                case 1 -> {
+                    System.out.println("Name: ");
+                    String name = scanner.nextLine().trim();
+                    actor.setName(name);
+                }
+                case 2 -> {
+                    System.out.println("These are all of the movies/series " +
+                            "that this actor has ever starred in: ");
+                    int i = 0;
+                    for (Performance performance : actor.getPerformances()){
+                        i++;
+                        System.out.println(i + ") " + performance);
+                    }
+                    System.out.println("Do you want to add,change or delete a" +
+                            " performance? (add/change/delete)");
+                    switch (scanner.nextLine().trim()){
+                        case "add" -> {
+                            System.out.println("Title: ");
+                            String title = scanner.nextLine().trim();
+                            System.out.println("Type: ");
+                            String type = scanner.nextLine().trim();
+                            Performance performance = new Performance(title,
+                                    type);
+                            actor.addPerformance(performance);
+                        }
+                        case "change" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat performance do you" +
+                                        " want to " +
+                                        "change?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "performance " +
+                                            "number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            Performance performance =
+                                    actor.getPerformance(option);
+                            System.out.println("\nThis is the performance " +
+                                    "that you selected: " + performance);
+                            System.out.println("Title: ");
+                            String title = scanner.nextLine().trim();
+                            performance.setTitle(title);
+                            System.out.println("Type: ");
+                            String type = scanner.nextLine().trim();
+                            performance.setType(type);
+                        }
+                        case "delete" -> {
+                            int option = 0;
+                            do{
+                                System.out.println("\nWhat performance do you" +
+                                        " want to " +
+                                        "delete?");
+                                option = scanner.nextInt();
+                                scanner.nextLine();
+                                if (option < 1 || option > i){
+                                    System.err.println("Enter a valid " +
+                                            "performance" +
+                                            " " +
+                                            "number please!");
+                                } else{
+                                    break;
+                                }
+                            }
+                            while (true);
+                            option--;
+
+                            actor.getPerformances().remove(i - 1);
+                        }
+                        default -> System.err.println("Please enter a valid " +
+                                "option!");
+                    }
+                }
+                case 3 -> {
+                    System.out.println("Biography: ");
+                    String biography = scanner.nextLine().trim();
+                    actor.setBiography(biography);
+                }
+                case 4 -> {
+                    return;
+                }
+                default -> {
+                    System.err.println("Please enter a valid option");
+                }
+            }
+        } while (true);
+    }
+
 
     public static void manageReviews(){
         System.out.println("TODO");

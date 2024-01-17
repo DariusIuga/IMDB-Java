@@ -17,7 +17,8 @@ import java.util.ArrayList;
         @JsonSubTypes.Type(value = Movie.class, name = "Movie"),
         @JsonSubTypes.Type(value = Series.class, name = "Series")}
 )
-public abstract class Production implements CommonInterface,Comparable<CommonInterface>{
+public abstract class Production implements CommonInterface,
+        Comparable<CommonInterface>{
     private String title;
     private ArrayList<String> directors;
     private ArrayList<String> actors;
@@ -26,12 +27,13 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
     private ArrayList<Rating> ratings;
     private String plot;
     private double averageRating;
+    private short releaseYear;
 
 
     public Production(String title, ArrayList<String> directors,
                       ArrayList<String> actors, ArrayList<Genre> genres,
                       ArrayList<Rating> ratings, String plot,
-                      double averageRating){
+                      double averageRating, short releaseYear){
         this.title = title;
         this.directors = directors;
         this.actors = actors;
@@ -39,6 +41,7 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
         this.ratings = ratings;
         this.plot = plot;
         this.averageRating = averageRating;
+        this.releaseYear = releaseYear;
     }
 
     public Production(){
@@ -57,14 +60,23 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
     public ArrayList<String> getDirectors(){
         return directors;
     }
+    public String getDirector(int i){
+        return directors.get(i);
+    }
+
 
     public void setDirectors(ArrayList<String> directors){
         this.directors = directors;
     }
 
+
     public ArrayList<String> getActors(){
         return actors;
     }
+    public String getActor(int i){
+        return actors.get(i);
+    }
+
 
     public void setActors(ArrayList<String> actors){
         this.actors = actors;
@@ -76,6 +88,12 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
 
     public void setGenres(ArrayList<Genre> genres){
         this.genres = genres;
+    }
+
+    public void addGenre(Genre genre){
+        if(!this.genres.contains(genre)){
+            this.genres.add(genre);
+        }
     }
 
     public ArrayList<Rating> getRatings(){
@@ -118,6 +136,19 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
     public String getName(){
         return title;
     }
+    public short getReleaseYear(){
+        return releaseYear;
+    }
+
+    public void setReleaseYear(short releaseYear){
+        if(releaseYear > 1920 || releaseYear <= 2024){
+            this.releaseYear = releaseYear;
+        }
+        else{
+            System.err.println("Invalid release year!");
+        }
+    }
+
 
     @Override
     public int compareTo(@NotNull CommonInterface o){
@@ -135,6 +166,8 @@ public abstract class Production implements CommonInterface,Comparable<CommonInt
                 ", ratings=" + ratings +
                 ", plot='" + plot + '\'' +
                 ", averageRating=" + averageRating +
+                ", releaseYear=" + releaseYear +
                 "}\n";
     }
+
 }
