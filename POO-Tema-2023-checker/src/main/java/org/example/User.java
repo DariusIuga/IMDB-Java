@@ -33,6 +33,8 @@ public abstract class User<T extends Comparable<T>> implements Observer{
     ArrayList<String> favoriteProductions;
     ArrayList<String> favoriteActors;
 
+    private ExperienceStrategy strategy;
+
 
     public User(){
 
@@ -47,6 +49,15 @@ public abstract class User<T extends Comparable<T>> implements Observer{
         this.experience = experience;
         this.notifications = notifications;
         this.favorites = favorites;
+    }
+
+    public ExperienceStrategy getStrategy(){
+        return strategy;
+    }
+
+    public void setStrategy(ExperienceStrategy strategy){
+        this.strategy = strategy;
+        this.experience += strategy.calculateExperience();
     }
 
     public Information getInformation(){

@@ -11,7 +11,7 @@ public class Rating implements Subject{
 
     public Rating(String username, byte rating, String comment){
         if(rating < 1 || rating > 10){
-            System.err.println("Grades left by users should be between 1 and" +
+            System.err.println("Ratings left by users should be between 1 and" +
                     " 10!");
         }
         this.username = username;
@@ -74,6 +74,7 @@ public class Rating implements Subject{
                 "username='" + username + '\'' +
                 ", rating=" + rating +
                 ", comment='" + comment + '\'' +
-                "}\n";
+                ", observers=" + observers +
+                '}';
     }
 }
